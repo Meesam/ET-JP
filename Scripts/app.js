@@ -1,39 +1,36 @@
-var issueTrackerApp=angular.module('issueTrackerApp',['ngRoute','ngCookies','cgNotify','ngSanitize','ui.bootstrap']);
+var jobPortal = angular.module('jobPortal', ['ngRoute', 'ngCookies', 'cgNotify']);
 function getRoute(name) {
     return {
-        templateUrl: 'views/' + name + '.html?r=' + FTVer,
+        templateUrl: 'views/' + name + '.html?r=' + JPVer,
         controller: name.substring(name.indexOf('/') + 1) + 'controller',
         resolve: {
             load: function ($q, $route, $rootScope) {
                 var deferred = $q.defer();
-                $script(['views/' + name + '.js?r=' + FTVer], function () {
-                 $rootScope.$apply(function () { deferred.resolve(); }); });
+                $script(['views/' + name + '.js?r=' + JPVer],
+                    function () {
+                    $rootScope.$apply(function () {
+                        deferred.resolve();
+                    });
+                });
                 return deferred.promise;
             }
         }
     }
 }
-issueTrackerApp.config(function ($routeProvider, $controllerProvider, $locationProvider) {
-    issueTrackerApp.registerCtrl = $controllerProvider.register;
+jobPortal.config(function ($routeProvider, $controllerProvider, $locationProvider) {
+    jobPortal.registerCtrl = $controllerProvider.register;
     $routeProvider
-        .when('/', getRoute('login'))
-        .when('/login', getRoute('login'))
-        .when('/myprofile', getRoute('userprofile'))
-        .when('/dashboard', getRoute('dashboard'))
-        .when('/projects', getRoute('projects'))
-        .when('/issues', getRoute('issues'))
-        .when('/issuetype', getRoute('issuetype'))
-        .when('/status', getRoute('status'))
-        .when('/users', getRoute('userprofile'))
-        .when('/projects/:ID',getRoute('projectdetail'))
-        .when('/issue/:ID',getRoute('issuedetail'))
+        .when('/', getRoute('authentication/login'))
+        .when('/login', getRoute('authentication/login'))
+        .when('/signin', getRoute('company/clientmaster'))
+        .when('/candidate', getRoute('candidates/candidate'))
         .otherwise({ redirectTo: '/notfound' });
    $locationProvider.html5Mode(true);
 });
-issueTrackerApp.service('appServices', appServices);
-issueTrackerApp.controller('mainCtrl', mainCtrl);
+jobPortal.service('appServices', appServices);
+jobPortal.controller('mainCtrl', mainCtrl);
 
-issueTrackerApp.run(function ($rootScope, $location, $cookies, appServices) {
+jobPortal.run(function ($rootScope, $location, $cookies, appServices) {
     var token = $cookies.get('UserToken');
     if (token) $rootScope.token = token;
     $rootScope.$on("$routeChangeStart", function (event, next, current) {
@@ -157,7 +154,7 @@ function getTableObj(tableid, token, initSort, apipath, refreshTableFunc) {
 }
 
 // email validation
-issueTrackerApp.factory('validationService', function () {
+jobPortal.factory('validationService', function () {
     return {
         Email: function (email) {
             var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -166,10 +163,28 @@ issueTrackerApp.factory('validationService', function () {
     };
 });
 
-issueTrackerApp.filter('UTC2Local', function () {
+jobPortal.filter('UTC2Local', function () {
     return function (date) {
         if (date == null) { return date }
         return new Date(date + 'Z');
+    };
+});
+
+
+jobPortal.directive('topMenu', function () {
+    return {
+        restrict: 'AE',
+        templateUrl: 'views/directives/top-menu.html',
+        scope: {
+            projectList: '=',
+            projectTitle: '@',
+            plugin: '&'
+        },
+        controller: function ($scope, $element, $attrs) {
+            $scope.removeProject = function (projectid) {
+                console.log('projectid is ' + projectid);
+            };
+        }
     };
 });
 
