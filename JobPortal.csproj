@@ -253,6 +253,7 @@
   <ItemGroup>
     <Content Include="angular-notify.html" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
+    <Content Include="css\angular-notify.css" />
     <Content Include="css\aristo-ui.css" />
     <Content Include="css\bootstrap-editable.css" />
     <Content Include="css\bootstrap-fileupload.css" />
@@ -267,6 +268,7 @@
     <Content Include="css\fullcalendar.css" />
     <Content Include="css\jquery.gritter.css" />
     <Content Include="css\jquery.minicolors.css" />
+    <Content Include="css\nprogress.css" />
     <Content Include="css\prettify.css" />
     <Content Include="css\select.css" />
     <Content Include="css\styles.css" />
@@ -456,8 +458,14 @@
     <Content Include="views\candidates\candidate.html" />
     <Content Include="views\candidates\candidate.js" />
     <Content Include="views\company\client.html" />
-    <Content Include="views\company\clientmaster.js" />
+    <Content Include="views\company\client.js" />
+    <Content Include="views\directives\left-menu.html" />
+    <Content Include="views\directives\left-menu.js" />
     <Content Include="views\directives\top-menu.html" />
+    <Content Include="views\directives\top-menu.js" />
+    <Content Include="views\directives\top-notification.html" />
+    <Content Include="views\directives\top-notification.js" />
+    <Content Include="views\services\jobPortalServices.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

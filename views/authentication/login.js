@@ -1,4 +1,5 @@
-﻿jobPortal.registerCtrl('logincontroller', function logincontroller($scope, $rootScope, $http, $location, appServices, $cookies, validationService) {
+﻿jobPortal.controller('loginController', ['$scope', '$rootScope', '$http', '$location', 'appServices', '$cookies', 'validationService',
+    function ($scope, $rootScope, $http, $location, appServices, $cookies, validationService) {
     $scope.loginInfo = { Email: '', Password: '' };
     $scope.doLogin = function () {
         if ($scope.loginInfo.UserName == '') { $rootScope.setMsg('UserName is required'); return }
@@ -21,4 +22,4 @@
 
         });
     }
-});
+}]);

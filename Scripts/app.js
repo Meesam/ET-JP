@@ -1,34 +1,77 @@
 var jobPortal = angular.module('jobPortal', ['ngRoute', 'ngCookies', 'cgNotify']);
-function getRoute(name) {
-    return {
-        templateUrl: 'views/' + name + '.html?r=' + JPVer,
-        controller: name.substring(name.indexOf('/') + 1) + 'controller',
-        resolve: {
-            load: function ($q, $route, $rootScope) {
-                var deferred = $q.defer();
-                $script(['views/' + name + '.js?r=' + JPVer],
-                    function () {
-                    $rootScope.$apply(function () {
-                        deferred.resolve();
-                    });
-                });
-                return deferred.promise;
-            }
-        }
-    }
-}
+
 jobPortal.config(function ($routeProvider, $controllerProvider, $locationProvider) {
-    jobPortal.registerCtrl = $controllerProvider.register;
     $routeProvider
-        .when('/', getRoute('authentication/login'))
-        .when('/login', getRoute('authentication/login'))
-        .when('/signin', getRoute('company/clientmaster'))
-        .when('/candidate', getRoute('candidates/candidate'))
-        .otherwise({ redirectTo: '/notfound' });
+        .when('/', {
+            templateUrl: 'views/authentication/login.html?r=' + JPVer,
+            controller: 'loginController'
+         })
+        .when('/client', {
+            templateUrl: 'views/company/client.html?r=' + JPVer,
+            controller: 'clientController'
+        })
+        .when('/login', {
+            templateUrl: 'views/authentication/login.html?r=' + JPVer,
+            controller: 'loginController'
+        })
+        .when('/candidate', {
+            templateUrl: 'views/candidates/candidate.html?r=' + JPVer,
+            controller: 'candidateController'
+        })
+        .otherwise({ redirectTo: '/login' });
    $locationProvider.html5Mode(true);
 });
-jobPortal.service('appServices', appServices);
-jobPortal.controller('mainCtrl', mainCtrl);
+
+
+jobPortal.controller('mainController', ['$scope', '$rootScope', '$location', '$cookies', 'notify', '$http', 'appServices',
+    function ($scope, $rootScope, $location, $cookies, notify, $http, appServices) {
+        $rootScope.mUser = null;
+        $rootScope.attParam = null;
+        $rootScope.isBusy = 0;
+        $scope.loc = $location;
+        $scope.mainMenu = {};
+        $scope.addToken = function (str) { return { Search: str, Token: $rootScope.token }; };
+        $rootScope.setMsg = function (msg, succ) {
+            notify.closeAll();
+            notify({ message: msg, classes: (succ ? 'alert-success' : 'alert-danger'), duration: 5000 });
+        };
+        $rootScope.goSignin = function (url) {
+            if (url && url.indexOf('login.html') < 0 && url.indexOf('login.html') < 0 && url.indexOf('passwordreset.html') < 0 && url.indexOf('validate.html') < 0) {
+                $rootScope.setMsg('Please sign-in to continue...');
+                $location.path('/signin');
+            }
+        };
+        // to get module
+        $scope.getModules = function () {
+            appServices.doActionGet({ Token: $rootScope.token }, 'modules').then(function (d) {
+                if (d.Status == 'success') {
+                    $scope.mainModule = d.objdata;
+                }
+            });
+        };
+
+
+        $scope.isMenu = false;
+        $scope.getModuleMenu = function (id) {
+            appServices.doActionGet({ Token: $rootScope.token }, 'modules/' + id + '').then(function (d) {
+                if (d.Status == 'success') {
+                    $scope.isMenu = true;
+                    $scope.moduleMenu = d.objdata;
+                }
+            });
+        };
+
+        $rootScope.processForward = function () {
+            $scope.getModules();
+        };
+
+        $rootScope.signout = function () {
+            $rootScope.mUser = null;
+            $rootScope.token = null;
+            $cookies.remove('UserToken');
+            $location.path('/login');
+        };
+}]);
 
 jobPortal.run(function ($rootScope, $location, $cookies, appServices) {
     var token = $cookies.get('UserToken');
@@ -42,67 +85,18 @@ jobPortal.run(function ($rootScope, $location, $cookies, appServices) {
                 appServices.getUserByToken(token).then(function (d) {
                     if (d.Status == 'success') {
                         $rootScope.mUser = d.objdata;
-                        if ($rootScope.mUser != null && next.templateUrl == "views/login.html?r=0aq"){
-                          $location.path("/dashboard");
+                        if ($rootScope.mUser != null && next.templateUrl == "views/login.html?r=0aq") {
+                            $location.path("/dashboard");
                         }
                         $rootScope.$broadcast('userReady', null);
                         $rootScope.processForward();
                     } else $rootScope.goSignin(next.templateUrl);
                 });
             }
-           else $rootScope.goSignin(next.templateUrl);
+            else $rootScope.goSignin(next.templateUrl);
         }
     });
-})
-
-function mainCtrl($scope, $location, $rootScope, $cookies, notify, $http, appServices) {
-    $rootScope.mUser = null;
-    $rootScope.attParam = null;
-    $rootScope.isBusy = 0;
-    $scope.loc = $location;
-    $scope.mainMenu = {};
-    $scope.addToken = function (str) { return { Search: str, Token: $rootScope.token }; }
-    $rootScope.setMsg = function (msg, succ) {
-        notify.closeAll();
-        notify({ message: msg, classes: (succ ? "alert-success" : "alert-danger"), duration: 5000 });
-    }
-    $rootScope.goSignin = function (url) {
-        if (url && url.indexOf('login.html') < 0 && url.indexOf('login.html') < 0 && url.indexOf('passwordreset.html') < 0 && url.indexOf('validate.html') < 0) {
-            $rootScope.setMsg('Please sign-in to continue...');
-            $location.path("/signin");
-        }
-    }
-    // to get module
-    $scope.getModules = function () {
-        appServices.doActionGet({ Token: $rootScope.token }, 'modules').then(function (d) {
-            if (d.Status == 'success'){
-              $scope.mainModule = d.objdata;
-            } 
-        });
-    }
-
-
-    $scope.isMenu=false;
-    $scope.getModuleMenu=function(id){
-      appServices.doActionGet({ Token: $rootScope.token }, 'modules/'+ id + '').then(function (d) {
-            if (d.Status == 'success'){
-              $scope.isMenu=true;
-              $scope.moduleMenu = d.objdata;
-            } 
-        }); 
-    }
-
-    $rootScope.processForward=function(){
-       $scope.getModules();   
-    }
-   
-    $rootScope.signout = function () {
-        $rootScope.mUser = null;
-        $rootScope.token = null;
-        $cookies.remove('UserToken');
-        $location.path("/login");
-    }
-}
+});
 
 function getTableObj(tableid, token, initSort, apipath, refreshTableFunc) {
     var itf = {};
@@ -171,22 +165,7 @@ jobPortal.filter('UTC2Local', function () {
 });
 
 
-jobPortal.directive('topMenu', function () {
-    return {
-        restrict: 'AE',
-        templateUrl: 'views/directives/top-menu.html',
-        scope: {
-            projectList: '=',
-            projectTitle: '@',
-            plugin: '&'
-        },
-        controller: function ($scope, $element, $attrs) {
-            $scope.removeProject = function (projectid) {
-                console.log('projectid is ' + projectid);
-            };
-        }
-    };
-});
+
 
 var appStor = {
     save: function (key, value) { if (typeof (Storage) !== "undefined") { localStorage.setItem(key, value); } },

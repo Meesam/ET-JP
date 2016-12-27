@@ -1,1 +1,25 @@
-﻿<h1>Login Page</h1>
+﻿<div ng-controller="loginController">
+    <div class="container">
+        <div class="form-signin">
+            <h3 class="form-signin-heading">Please sign in</h3>
+            <div class="controls input-icon">
+                <i class="icon-user-md"></i>
+                <input type="text" ng-model="loginInfo.UserName" class="input-block-level" placeholder="UserName">
+            </div>
+            <div class="controls input-icon">
+                <i class="icon-key"></i><input type="password" ng-model="loginInfo.Password" class="input-block-level" placeholder="Password">
+            </div>
+            <label class="checkbox">
+                <input type="checkbox" value="remember-me"> Remember me
+            </label>
+            <input class="btn btn-primary btn-block" type="submit" value="Sign in" ng-click="doLogin()" />
+            <h4>Forgot your password ?</h4>
+            <p>
+                <a href="#">Click here</a> to reset your password.
+            </p>
+           
+        </div>
+    </div>
+
+</div>
+
