@@ -3,9 +3,9 @@ namespace JobPortal.Models
 {
     public static class ResultModel
     {
-       public static string SUCCESS { get; set; }   
-       public static string FAIL { get; set; }
-       public static string ERROR { get; set; }
+       public static string SUCCESS { get { return "success"; } }   
+       public static string FAIL { get { return "fail"; } }
+       public static string ERROR { get { return "error"; } }
        public static int DATACOUNT { get; set; }
        public static string SaveMessage()
        {
@@ -27,5 +27,12 @@ namespace JobPortal.Models
         {
             return Message.Trim();
         }
+    }
+
+    public class ApiResult
+    {
+        public object ObjData { get; set; }
+        public string Token { get; set; }
+        public string Status { get; set; }
     }
 }

@@ -13,7 +13,8 @@
     // Login Service
     function doLogin(lInfo) {
         //NProgress.start(); $rootScope.isBusy += 1;
-        var request = $http({ method: "post", url: "/api/login", data: lInfo });
+        console.log('login is called');
+        var request = $http({ method: "post", url: "/api/Authentication/doLogin", data: lInfo });
         return (request.then(handleSuccess, handleError));
     }
     function doActionPost(actionParam, path) {
