@@ -38,7 +38,7 @@ namespace JobPortal.Models
                       Roles=new string[] { "Admin","Consultant" }
                  },
                  new UserRole() {
-                     UserId=3,
+                     UserId=2,
                       Roles=new string[] { "Consultant" }
                  },
                  new UserRole() {
