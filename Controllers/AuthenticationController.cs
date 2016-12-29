@@ -7,6 +7,7 @@ using System.Web.Http;
 using JobPortal.Models;
 using Newtonsoft.Json;
 using System.Runtime.Serialization.Formatters.Binary;
+using JobPortal.BusinessModel;
 
 namespace JobPortal.Controllers
 {
@@ -14,16 +15,28 @@ namespace JobPortal.Controllers
     {
         UserLoginBL _objUserBL = new UserLoginBL();
         [HttpPost]
-        public ApiResult doLogin([FromBody]object value)
+        public ApiResult doLogin([FromBody]UserLogin userInfo)
         {
-            var data= _objUserBL.doLogin("meesam","meesam");
+            var data= _objUserBL.doLogin(userInfo.UserName, userInfo.Password);
             var formatter = new BinaryFormatter();
-            return new ApiResult()
+            if (data != null)
             {
-                 ObjData= data,
-                 Token= data.ToString(),
-                 Status =ResultModel.SUCCESS
-            };
+                return new ApiResult()
+                {
+                    ObjData = data,
+                    Token = data.ToString(),
+                    Status = ResultModel.SUCCESS,
+                    Count=1
+                };
+            }
+            else
+            {
+                return new ApiResult()
+                {
+                    Status = ResultModel.SUCCESS,
+                    Count=0
+                };
+            }
         }
     }
 }

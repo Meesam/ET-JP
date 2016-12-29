@@ -34,5 +34,6 @@ namespace JobPortal.Models
         public object ObjData { get; set; }
         public string Token { get; set; }
         public string Status { get; set; }
+        public int Count { get; set; }
     }
 }

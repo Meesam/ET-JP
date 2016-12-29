@@ -73,6 +73,7 @@ jobPortal.controller('mainController', ['$scope', '$rootScope', '$location', '$c
         };
 }]);
 
+/*
 jobPortal.run(function ($rootScope, $location, $cookies, appServices) {
     var token = $cookies.get('UserToken');
     if (token) $rootScope.token = token;
@@ -96,7 +97,7 @@ jobPortal.run(function ($rootScope, $location, $cookies, appServices) {
             else $rootScope.goSignin(next.templateUrl);
         }
     });
-});
+});*/
 
 function getTableObj(tableid, token, initSort, apipath, refreshTableFunc) {
     var itf = {};

@@ -6,7 +6,7 @@
             else if ($scope.loginInfo.Password == '') { $rootScope.setMsg('Password is required'); return }
             appServices.doLogin($scope.loginInfo).then(function (d) {
                 console.log(JSON.stringify(d));
-                if (d.Status == 'success') { // Login Success
+                if (d.Status == 'success' && d.Count > 0) { // Login Success
                     $rootScope.mUser = d.ObjData;
                     $rootScope.token = d.Token;
                     if ($scope.loginInfo.Remember) {
