@@ -42,7 +42,7 @@ namespace JobPortal.Models
                       Roles=new string[] { "Consultant" }
                  },
                  new UserRole() {
-                     UserId=4,
+                     UserId=3,
                       Roles=new string[] { "Admin" }
                  }
             };
