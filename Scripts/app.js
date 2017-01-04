@@ -6,7 +6,7 @@ jobPortal.config(function ($routeProvider, $controllerProvider, $locationProvide
             templateUrl: 'views/authentication/login.html?r=' + JPVer,
             controller: 'loginController'
          })
-        .when('/client', {
+        .when('/clients', {
             templateUrl: 'views/company/client.html?r=' + JPVer,
             controller: 'clientController'
         })
@@ -30,30 +30,29 @@ jobPortal.controller('mainController', ['$scope', '$rootScope', '$location', '$c
         $rootScope.isBusy = 0;
         $scope.loc = $location;
         $scope.mainMenu = {};
-        $scope.addToken = function (str) { return { Search: str, Token: $rootScope.token }; };
+        $scope.addToken = function (str) { return { Search: str, Token: $rootScope.Token }; };
         $rootScope.setMsg = function (msg, succ) {
             notify.closeAll();
             notify({ message: msg, classes: (succ ? 'alert-success' : 'alert-danger'), duration: 5000 });
         };
         $rootScope.goSignin = function (url) {
-            if (url && url.indexOf('login.html') < 0 && url.indexOf('login.html') < 0 && url.indexOf('passwordreset.html') < 0 && url.indexOf('validate.html') < 0) {
+            if (url && url.indexOf('login.html') < 0 && url.indexOf('login.html') < 0) {
                 $rootScope.setMsg('Please sign-in to continue...');
-                $location.path('/signin');
+                $location.path('/login');
             }
         };
-        // to get module
-        $scope.getModules = function () {
-            appServices.doActionGet({ Token: $rootScope.token }, 'modules').then(function (d) {
-                if (d.Status == 'success') {
-                    $scope.mainModule = d.objdata;
-                }
+        // to get menu
+        $scope.getMenu = function () {
+            appServices.doActionGet({ Token: $rootScope.Token }, '/RoleMenu/GetMenu').then(function (d) {
+                if (d.Status == 'success' && d.Count > 0) {
+                    $scope.mainModule = d.ObjData;
+                } 
             });
         };
 
-
         $scope.isMenu = false;
         $scope.getModuleMenu = function (id) {
-            appServices.doActionGet({ Token: $rootScope.token }, 'modules/' + id + '').then(function (d) {
+            appServices.doActionGet({ Token: $rootScope.Token }, 'modules/' + id + '').then(function (d) {
                 if (d.Status == 'success') {
                     $scope.isMenu = true;
                     $scope.moduleMenu = d.objdata;
@@ -62,42 +61,38 @@ jobPortal.controller('mainController', ['$scope', '$rootScope', '$location', '$c
         };
 
         $rootScope.processForward = function () {
-            $scope.getModules();
+            $scope.getMenu();
         };
 
-        $rootScope.signout = function () {
-            $rootScope.mUser = null;
-            $rootScope.token = null;
-            $cookies.remove('UserToken');
-            $location.path('/login');
-        };
+        
 }]);
 
-/*
+
+
 jobPortal.run(function ($rootScope, $location, $cookies, appServices) {
     var token = $cookies.get('UserToken');
-    if (token) $rootScope.token = token;
+    if (token) $rootScope.Token = token;
     $rootScope.$on("$routeChangeStart", function (event, next, current) {
         $rootScope.attParam = null;
         if (!navigator.onLine) $rootScope.setMsg('Network not connected! Please check internet connection.');
         // Get user if token is there but no user
-        if ($rootScope.mUser == null) {
-            if ($rootScope.token) {
-                appServices.getUserByToken(token).then(function (d) {
-                    if (d.Status == 'success') {
-                        $rootScope.mUser = d.objdata;
-                        if ($rootScope.mUser != null && next.templateUrl == "views/login.html?r=0aq") {
-                            $location.path("/dashboard");
+        if ($rootScope.mUser === null) {
+            if ($rootScope.Token) {
+                var userToken = { UserName: token };
+                appServices.getUserByToken(userToken).then(function (d) {
+                    if (d.Status === 'success' && d.Count > 0) {
+                        $rootScope.mUser = d.ObjData;
+                        if ($rootScope.mUser !== null && next.templateUrl === 'views/authentication/login.html?r=0ab') {
+                            $location.path('/clients');
                         }
                         $rootScope.$broadcast('userReady', null);
                         $rootScope.processForward();
                     } else $rootScope.goSignin(next.templateUrl);
                 });
-            }
-            else $rootScope.goSignin(next.templateUrl);
+            } else $rootScope.goSignin(next.templateUrl);
         }
-    });
-});*/
+   });
+});
 
 function getTableObj(tableid, token, initSort, apipath, refreshTableFunc) {
     var itf = {};
@@ -139,7 +134,7 @@ function getTableObj(tableid, token, initSort, apipath, refreshTableFunc) {
         refreshTableFunc();
     }
     itf.setRows = function (aRes) {
-        this.Rows = aRes.objdata;
+        this.Rows = aRes.ObjData;
         this.TotalRows = aRes.Count;
         this.NumPages = Math.floor((this.TotalRows + this.RPP - 1) / this.RPP);
         if (this.CurPage > this.NumPages) this.CurPage = this.NumPages;

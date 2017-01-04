@@ -6,7 +6,7 @@ using System.Web;
 
 namespace JobPortal.BusinessModel
 {
-    public class ClientMaster
+    public class ClientMaster:BaseEntity
     {
         [Key]
         public int ClientID { get; set; }
@@ -16,6 +16,6 @@ namespace JobPortal.BusinessModel
         public string CompanyGroup { get; set; }
         public string ClientLogo { get; set; }
         public int TotalEmployeeCount { get; set; }
-        public double TurnoverCrore { get; set; }
+        public int TurnoverCrore { get; set; }
     }
 }

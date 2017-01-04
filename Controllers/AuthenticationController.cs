@@ -15,6 +15,7 @@ namespace JobPortal.Controllers
     {
         UserLoginBL _objUserBL = new UserLoginBL();
         [HttpPost]
+        [ActionName("doLogin")]
         public ApiResult doLogin([FromBody]UserLogin userInfo)
         {
             var data= _objUserBL.doLogin(userInfo.UserName, userInfo.Password);
@@ -24,7 +25,7 @@ namespace JobPortal.Controllers
                 return new ApiResult()
                 {
                     ObjData = data,
-                    Token = data.ToString(),
+                    Token = "meesam",
                     Status = ResultModel.SUCCESS,
                     Count=1
                 };
@@ -35,6 +36,32 @@ namespace JobPortal.Controllers
                 {
                     Status = ResultModel.SUCCESS,
                     Count=0
+                };
+            }
+        }
+
+        [HttpPost]
+        [ActionName("getUserByToken")]
+        public ApiResult getUserByToken([FromBody]UserLogin userInfo)
+        {
+            var data = _objUserBL.getUserByToken(userInfo.UserName);
+            var formatter = new BinaryFormatter();
+            if (data != null)
+            {
+                return new ApiResult()
+                {
+                    ObjData = data,
+                    Token = "meesam",
+                    Status = ResultModel.SUCCESS,
+                    Count = 1
+                };
+            }
+            else
+            {
+                return new ApiResult()
+                {
+                    Status = ResultModel.SUCCESS,
+                    Count = 0
                 };
             }
         }

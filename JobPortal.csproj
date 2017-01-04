@@ -237,14 +237,17 @@
     <Compile Include="BusinessModel\UserLogin.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AuthenticationController.cs" />
+    <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\RoleMenuController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\BaseEntity.cs" />
+    <Compile Include="BusinessModel\BaseEntity.cs" />
+    <Compile Include="Models\ClientBL.cs" />
     <Compile Include="Models\CoreModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ResultModel.cs" />
@@ -463,12 +466,16 @@
     <Content Include="views\candidates\candidate.js" />
     <Content Include="views\company\client.html" />
     <Content Include="views\company\client.js" />
+    <Content Include="views\directives\client-list.html" />
+    <Content Include="views\directives\client-list.js" />
     <Content Include="views\directives\left-menu.html" />
     <Content Include="views\directives\left-menu.js" />
     <Content Include="views\directives\top-menu.html" />
     <Content Include="views\directives\top-menu.js" />
     <Content Include="views\directives\top-notification.html" />
     <Content Include="views\directives\top-notification.js" />
+    <Content Include="views\directives\user-session.html" />
+    <Content Include="views\directives\user-session.js" />
     <Content Include="views\services\jobPortalServices.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

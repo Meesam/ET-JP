@@ -1,0 +1,43 @@
+﻿<style type="text/css">
+.tblborder {
+border-color: #367fa9;
+border-style: solid;
+border-width: 1px;
+}
+
+.cp {
+cursor: pointer;
+}
+</style>
+<div class="row-fluid">
+    <div class="widget-container">
+        <div class="row-fluid">
+            <div class="span8">
+                <div class="pull-left">
+                    <h3>Clients</h3>
+                </div>
+            </div>
+            <div class="span4">
+                <div class="pull-right"><input type="submit" class="btn btn-primary" value="Add New" /></div>
+            </div>
+        </div>
+        <table class="paper-table">
+            <tbody>
+                <tr>
+                    <th>Company Name</th>
+                    <th>Industry</th>
+                    <th>Total Employee</th>
+                    <th>TurnOver(In cr.)</th>
+                    <th>Create Date</th>
+                </tr>
+                <tr ng-repeat="c in clientData.Rows">
+                    <td>{{c.CompanyName}}</td>
+                    <td>{{c.Industry}}</td>
+                    <td>{{c.TotalEmployeeCount}}</td>
+                    <td>{{c.TurnoverCrore}}</td>
+                    <td>{{c.CreateDate | date:'dd MMM yyyy'}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
