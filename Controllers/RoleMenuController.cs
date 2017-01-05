@@ -18,7 +18,7 @@ namespace JobPortal.Controllers
             Menu objmenu = new Menu();
             return new ApiResult()
             {
-                ObjData = objmenu.GetMenu(),
+                ObjData = objmenu.GetMenu().OrderBy(x=>x.MenuId),
                 Token = "meesam",
                 Status = ResultModel.SUCCESS,
                 Count = 1

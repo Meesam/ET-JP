@@ -69,28 +69,33 @@ namespace JobPortal.Models
         public int MenuId{ get; set; }
         public string MenuName { get; set; }
         public string Icon { get; set; }
+        public string LargeIcon { get; set; }
 
         public List<Menu> GetMenu()
         {
             return new List<Menu>() {
                 new Menu() {
-                    MenuId=1,
+                    MenuId=3,
                     MenuName="Consultant",
+                    LargeIcon="icon-th-large"
                     //Route="/consultant"
                 },
                 new Menu() {
                     MenuId=2,
                     MenuName="Candidates",
+                    LargeIcon="icon-list-alt"
                     //Route="/candidate"
                 },
                 new Menu() {
-                     MenuId=3,
+                     MenuId=1,
                      MenuName="Clients",
+                     LargeIcon="icon-file-alt"
                     // Route="/clients"
                 },
                 new Menu() {
                      MenuId=4,
                      MenuName="Mandates",
+                     LargeIcon="icon-external-link"
                      //Route="/mandates "
                 }
                 
@@ -101,6 +106,7 @@ namespace JobPortal.Models
     public class SubMenu
     {
         public int MenuId { get; set; }
+        public string MenuName { get; set; }
         public string SubMenuName { get; set; }
         public string Icon { get; set; }
         public string Route { get; set; }
@@ -109,31 +115,36 @@ namespace JobPortal.Models
         {
             return new List<SubMenu>() {
                 new SubMenu() {
-                     MenuId=3,
+                     MenuId=1,
+                      MenuName="Clients",
                      SubMenuName="All Clients",
                      Icon="",
                      Route="/clients"
                 },
                 new SubMenu() {
-                     MenuId=3,
+                     MenuId=1,
+                     MenuName="Clients",
                      SubMenuName="Add Client",
                      Icon="",
                      Route="/clients"
                 },
                 new SubMenu() {
                      MenuId=2,
+                     MenuName="Candidates",
                      SubMenuName="All Candidates",
                      Icon="",
                      Route="/candidate"
                 },
                 new SubMenu() {
                      MenuId=2,
+                     MenuName="Candidates",
                      SubMenuName="Add Candidate",
                      Icon="",
                      Route="/candidate"
                 },
                 new SubMenu() {
                      MenuId=2,
+                     MenuName="Candidates",
                      SubMenuName="Upload Candidates",
                      Icon="",
                      Route="/candidate"

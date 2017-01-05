@@ -65,7 +65,7 @@
 			</div>
 		</div>
 	</div>
-	<left-menu ng-if="mUser!=null"></left-menu>
+	<left-menu ng-if="mUser!=null" menu-list="mainModule"></left-menu>
 	<div ng-class="mUser!=null ? 'main-wrapper' : 'main-wrapper before-login'">
 		<div class="container-fluid">
             <div ng-view></div>
